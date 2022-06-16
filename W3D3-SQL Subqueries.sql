@@ -1,0 +1,28 @@
+#1.How many copies of the film Hunchback Impossible exist in the inventory system?
+use sakila;
+select count(film_id) as num_films
+from inventory
+where film_id in (select film_id from film where title="Hunchback Impossible")
+group by film_id;
+
+select count(film_id) as num_films
+from inventory inner join film using (film_id)
+where title ="Hunchback Impossible"
+group by film_id;
+
+#2.List all films whose length is longer than the average of all the films.
+SELECT AVG(length) AS average FROM film;
+SELECT title
+FROM film
+where length > (SELECT AVG(length) AS average FROM film);
+
+#3.Use subqueries to display all actors who appear in the film Alone Trip.
+select CONCAT(first_name,' ',last_name) as 'Actors in Alone Trip'
+from actor
+where actor_id in 
+(select actor_id from film_actor where film_id = 
+(select film_id from film where title = 'Alone Trip'));
+
+#4.Sales have been lagging among young families, 
+#and you wish to target all family movies for a promotion.
+#Identify all movies categorized as family films.
